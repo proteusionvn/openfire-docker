@@ -57,3 +57,12 @@ EXPOSE 9191
 # HTTPS Admin Console
 EXPOSE 7070
 # HTTP BOSH binding
+
+COPY launch-openfire.sh /sbin/launch-openfire.sh
+RUN chmod 0755 /sbin/launch-openfire.sh && \
+	mv /etc/openfire /etc/openfire--SAVE && \
+	mv /var/lib/openfire /var/lib/openfire--SAVE && \
+	rm -rf /var/log/openfire
+VOLUME /var/cache/openfire-data
+
+ENTRYPOINT ["/sbin/launch-openfire.sh"]
