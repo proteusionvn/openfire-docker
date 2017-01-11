@@ -57,6 +57,8 @@ EXPOSE 9191
 # HTTPS Admin Console
 EXPOSE 7070
 # HTTP BOSH binding
+EXPOSE 7443
+# HTTPS BOSH binding
 
 COPY launch-openfire.sh /sbin/launch-openfire.sh
 RUN chmod 0755 /sbin/launch-openfire.sh && \
