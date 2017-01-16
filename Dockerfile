@@ -27,22 +27,17 @@ ARG OPENFIRE_GIT_COMMIT=master
 
 # Clone sources
 WORKDIR /var/tmp/src
-RUN git clone $OPENFIRE_GIT
-WORKDIR /var/tmp/src/openfire
-RUN git checkout $OPENFIRE_GIT_COMMIT
-
-# Build
-RUN locale
-RUN make
-RUN make JAVA_HOME=${JAVA_HOME} dpkg
-RUN cd /var/tmp/src/openfire/target/release/debian && dpkg -i openfire*.deb
-
-# Cleanup
-WORKDIR /
-RUN cd /var/tmp && rm -rf src
-
-# Should start itself?
-RUN touch /.firstboot.tmp
+RUN git clone $OPENFIRE_GIT && \
+	cd openfire && \
+	git checkout $OPENFIRE_GIT_COMMIT && \
+	make && \
+	make plugins && \
+	make JAVA_HOME=${JAVA_HOME} dpkg && \
+	cd /var/tmp/src/openfire/target/release/debian && \
+	dpkg -i openfire*.deb && \
+	cd /var/tmp && \
+	rm -rf src && \
+	touch /.firstboot.tmp
 
 # Ports:
 EXPOSE 5222
