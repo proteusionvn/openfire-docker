@@ -24,6 +24,7 @@ RUN apt-get install ant git openjdk-8-jdk-headless debhelper dpkg locales libc-b
 # git repo (your local, or the default Ignite's)
 ARG OPENFIRE_GIT=https://github.com/igniterealtime/openfire
 ARG OPENFIRE_GIT_COMMIT=master
+ARG OPENFIRE_PLUGINS="dbaccess websocket"
 
 # Clone sources
 WORKDIR /var/tmp/src
@@ -31,10 +32,14 @@ RUN git clone $OPENFIRE_GIT && \
 	cd openfire && \
 	git checkout $OPENFIRE_GIT_COMMIT && \
 	make && \
-	make plugins && \
 	make JAVA_HOME=${JAVA_HOME} dpkg && \
 	cd /var/tmp/src/openfire/target/release/debian && \
 	dpkg -i openfire*.deb && \
+	cd /var/tmp/src/openfire && \
+	make plugins && \
+	for plugin in $OPENFIRE_PLUGINS; do \
+		cp ./target/openfire/plugins/${plugin}.jar /var/lib/openfire/plugins/; \
+	done && \
 	cd /var/tmp && \
 	rm -rf src && \
 	touch /.firstboot.tmp

@@ -17,6 +17,9 @@ if [ ! -d /var/cache/openfire-data/var ]; then
 else
 	rm -rf /var/cache/openfire-data/var/plugins/admin
 	cp -prv /var/lib/openfire--SAVE/plugins/admin /var/cache/openfire-data/var/plugins/
+	for plugin in /var/lib/openfire--SAVE/plugins/*.jar; do
+		cp -prv ${plugin} /var/cache/openfire-data/var/plugins/
+	done
 fi
 ln -sf /var/cache/openfire-data/var /var/lib/openfire
 if [ ! -d /var/log/openfire ]; then
