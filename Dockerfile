@@ -28,8 +28,9 @@ ARG OPENFIRE_PLUGINS="dbaccess websocket"
 
 # Clone sources
 WORKDIR /var/tmp/src
-RUN git clone $OPENFIRE_GIT && \
-	cd openfire && \
+RUN git clone $OPENFIRE_GIT
+RUN cd openfire && \
+	git fetch && \
 	git checkout $OPENFIRE_GIT_COMMIT && \
 	make && \
 	make JAVA_HOME=${JAVA_HOME} dpkg && \
