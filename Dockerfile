@@ -13,6 +13,10 @@ MAINTAINER Dave Cridland <dave.cridland@surevine.com>
 # Set environment variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-amd64
+ENV DATABASE_HOST ""
+ENV DATABASE_NAME ""
+ENV DATABASE_USER ""
+ENV DATABASE_PASSWD ""
 
 # Update system
 RUN apt-get update && apt-get dist-upgrade -y && apt-get autoremove -y && apt-get clean
@@ -66,6 +70,7 @@ RUN chmod 0755 /sbin/launch-openfire.sh && \
 	mv /etc/openfire /etc/openfire--SAVE && \
 	mv /var/lib/openfire /var/lib/openfire--SAVE && \
 	rm -rf /var/log/openfire
+COPY openfire-postgres.xml /etc/openfire--SAVE/openfire-postgres.xml
 VOLUME /var/cache/openfire-data
 
 ENTRYPOINT ["/sbin/launch-openfire.sh"]
